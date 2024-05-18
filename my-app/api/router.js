@@ -20,16 +20,15 @@ router.post('/create-employee', async (req, res) => {
       }
     }
   });
-router.delete('/delete-employee/:id', async (req, res) => {
+  router.delete('/delete-employee/:id', async (req, res) => {
     try {
-      const employee = await Employee.findById(req.params.id);
+      const employee = await Employee.findOne({ _id: req.params.id });
   
       if (!employee) {
         return res.status(404).json({ msg: 'Employee not found' });
       }
   
-      await employee.remove();
-  
+      await Employee.deleteOne({ _id: req.params.id });
       res.json({ msg: 'Employee removed' });
     } catch (err) {
       console.error(err.message);
@@ -41,6 +40,7 @@ router.delete('/delete-employee/:id', async (req, res) => {
       res.status(500).send('Server error');
     }
   });
+
 router.get('/all-employees', async (req, res) => {
     try {
       const employees = await Employee.find();
