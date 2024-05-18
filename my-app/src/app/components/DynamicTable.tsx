@@ -1,38 +1,59 @@
-import React from 'react';
-
+"use client"; 
+import React, { useState, useEffect } from 'react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Button, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react"
+import PutModal from './PutModal'
 
 interface DynamicTableProps {
-  data: Array<Record<string, any>>;
   color: string;
+  data: any;
 }
 
-const DynamicTable: React.FC<DynamicTableProps> = ({ data, color }) => {
-  const columnHeaders = data.length > 0 ? Object.keys(data[0]) : [];
+const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [dataResolved, setDataResolved] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await data;
+      setDataResolved(result);
+    };
+
+    fetchData();
+  }, [data]);
+
+  console.log('data---', dataResolved);
 
   return (
-    <table style={{ width: '500px', margin: '0 auto', borderCollapse: 'collapse' }}>
-      <thead>
-        <tr>
-          {columnHeaders.map((header, index) => (
-            <th key={index} style={{ fontFamily: 'Arial' }}>{header}</th>
-          ))}
-          <th style={{ fontFamily: 'Arial' }}>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-      {data.map((row, rowIndex) => (
-  <tr key={rowIndex}>
-    {columnHeaders.map((column, columnIndex) => (
-      <td key={columnIndex} style={{ fontFamily: 'Arial', color: 'rgb(155, 155, 155)', borderBottom: '1px solid rgb(202, 202, 202)', textAlign: 'center', padding: '10px' }}>{row[column]}</td>
-    ))}
-      <td style={{ fontFamily: 'Arial', color: 'rgb(155, 155, 155)', borderBottom: '1px solid rgb(202, 202, 202)', textAlign: 'center', padding: '10px' }}>
-        <button data-id={row.id} style={{background:"rgb(149, 237, 8)",border:"none",padding:"5px",borderRadius:"5px"}}>Atualizar</button>
-        <button data-id={row.id} style={{background:"Grey",border:"none",padding:"5px",borderRadius:"5px", marginLeft:"10px"}}>Excluir</button>
-      </td>
-    </tr>
-  ))}
-      </tbody>
-    </table>
+    <ChakraProvider>
+  <Table variant="simple">
+    <Thead>
+      <Tr>
+        <Th textAlign="center">Nome</Th>
+        <Th textAlign="center">Posição</Th>
+        <Th textAlign="center">Email</Th>
+        <Th textAlign="center">Ações</Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+    {dataResolved && dataResolved.map((row, index) => (
+        <Tr key={index}>
+          <Td textAlign="center">{row.name}</Td>
+          <Td textAlign="center">{row.position}</Td>
+          <Td textAlign="center">{row.email}</Td>
+          <Td textAlign="center">
+          <Button colorScheme="purple" size="sm" onClick={() => { setSelectedId(row._id.toString()); onOpen(); }}>Atualizar</Button>
+            {/* <Button colorScheme="gray" size="sm" marginLeft="10px"id={row._id.toString()}>Deletar</Button> */}
+          <PutModal isOpen={isOpen} onClose={onClose} id={selectedId} />
+          </Td>
+        </Tr>
+      ))}
+    </Tbody>
+  </Table>
+ 
+</ChakraProvider>
+
   );
 };
 
