@@ -9,7 +9,6 @@ interface DeleteModalProps {
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, id }) => {
-  console.log('id--',id)
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

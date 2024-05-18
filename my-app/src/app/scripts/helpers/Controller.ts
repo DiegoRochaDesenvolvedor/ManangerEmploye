@@ -1,10 +1,7 @@
 import axios from 'axios';
 export default class Controller {
     static async putData(id: string, name: string, position: string, email: string) {
-        console.log('id:',id)
-        console.log('name:',name)
-        console.log('position:',position)
-        console.log('email:',email)
+
     try {
       const response = await axios.put(`http://localhost:4000/api/update-employee/${id}`, {
         name,
@@ -26,5 +23,18 @@ export default class Controller {
         } catch (error) {
           console.error(error);
         }
-      };
+    };
+    static async createEmployee(name:string, position:string, email:string){
+        try {
+          const response = await axios.post('http://localhost:4000/api/create-employee', {
+            name,
+            position,
+            email
+          });
+          console.log(response.data);
+          window.location.reload();
+        } catch (error) {
+          console.error(error);
+        }
+    };
   }

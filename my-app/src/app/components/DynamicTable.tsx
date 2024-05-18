@@ -27,7 +27,6 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
     fetchData();
   }, [data]);
 
-  console.log('data---', dataResolved);
 
   function handleDelete(): void {
     throw new Error('Function not implemented.');
