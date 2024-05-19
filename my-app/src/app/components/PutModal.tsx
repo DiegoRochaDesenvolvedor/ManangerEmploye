@@ -29,7 +29,6 @@ const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id, data }) => {
     setName(updatedData.name);
     setFunctionValue(updatedData.position);
     setEmail(updatedData.email);
-    forceUpdate({});
   };
 
   return(

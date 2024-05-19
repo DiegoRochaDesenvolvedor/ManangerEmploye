@@ -8,7 +8,7 @@ interface Employee {
 }
 export default async function getAllEmployees() {
   try {
-    const response: AxiosResponse<Employee[]> = await axios.get('http://localhost:4000/api/all-employees');
+    const response: AxiosResponse<Employee[]> = await axios.get('http://localhost:4000/api/employees');
     if (response.status !== 200) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

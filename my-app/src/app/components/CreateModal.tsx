@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Controller from '../scripts/helpers/Controller';
 
-const CreateModal = ({ isOpen, onClose }) => {
+const CreateModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");

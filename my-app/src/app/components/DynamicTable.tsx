@@ -10,11 +10,14 @@ interface DynamicTableProps {
   color: string;
   data: any;
 }
-
+interface RowData {
+  name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
+  position: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
+  email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
+  _id?: any;}
 const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [dataResolved, setDataResolved] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
+  const [dataResolved, setDataResolved] = useState<RowData[]>([]);  const [selectedId, setSelectedId] = useState(null);
   const { isOpen: isDeleteModalOpen, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
 
   useEffect(() => {
@@ -23,14 +26,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
       setDataResolved(result);
     };
     
-
     fetchData();
   }, [data]);
-
-
-  function handleDelete(): void {
-    throw new Error('Function not implemented.');
-  }
 
   return (
     <ChakraProvider>
@@ -44,7 +41,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
       </Tr>
     </Thead>
     <Tbody>
-    {dataResolved && dataResolved.map((row, index) => (
+      {dataResolved && Array.isArray(dataResolved) && dataResolved.map((row: RowData, index: number) => (
         <Tr key={index}>
           <Td textAlign="center">{row.name}</Td>
           <Td textAlign="center">{row.position}</Td>
@@ -52,8 +49,16 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
           <Td textAlign="center">
             <Button colorScheme="purple" size="sm" onClick={() => { setSelectedId(row._id.toString()); onOpen(); }}>Atualizar</Button>
             <Button colorScheme="gray" size="sm" marginLeft="10px" onClick={() => { setSelectedId(row._id.toString()); onOpenDeleteModal(); }}>Deletar</Button>
-            <PutModal isOpen={isOpen} onClose={onClose} id={selectedId} data={filterById(dataResolved,selectedId)}/>
-            <DeleteModal isOpen={isDeleteModalOpen} onClose={onCloseDeleteModal} id={selectedId} />
+            <PutModal 
+              isOpen={isOpen} 
+              onClose={onClose} 
+              id={row?._id?.toString() ?? ''} 
+              data={filterById(dataResolved.map((item: RowData) => ({ _id: item._id })), row?._id?.toString())?.[0] ?? { _id: '', name: '', position: '', email: '' }}/>
+            <DeleteModal 
+              isOpen={isDeleteModalOpen} 
+              onClose={onCloseDeleteModal} 
+              id={row?._id?.toString() ?? ''} 
+            />
           </Td>
         </Tr>
       ))}

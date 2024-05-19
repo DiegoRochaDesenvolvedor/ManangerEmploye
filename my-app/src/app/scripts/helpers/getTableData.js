@@ -39,28 +39,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, mongoose_1.default.connect('mongodb://localhost:27017/mananger', {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true,
-                    })];
-            case 1:
-                _a.sent();
-                console.log('MongoDB Connected...');
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _a.sent();
-                console.error(err_1.message);
-                process.exit(1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+var axios_1 = __importDefault(require("axios"));
+function getAllEmployees() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1.default.get('http://localhost:4000/api/all-employees')];
+                case 1:
+                    response = _a.sent();
+                    if (response.status !== 200) {
+                        throw new Error("HTTP error! status: ".concat(response.status));
+                    }
+                    return [2 /*return*/, response.data];
+                case 2:
+                    error_1 = _a.sent();
+                    console.error(error_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); };
-exports.default = connectDB;
+}
+exports.default = getAllEmployees;

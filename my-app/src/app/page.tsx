@@ -8,7 +8,7 @@ const getTableData = require('./scripts/helpers/getTableData').default;
 
 const Page: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const dataRequest = getTableData().then(data => data);
+  const dataRequest = getTableData().then((data: any) => data);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
