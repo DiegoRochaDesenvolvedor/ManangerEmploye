@@ -16,14 +16,14 @@ const Page: React.FC = () => {
   return (
     <div>
       <ChakraProvider>
-        <Box bg="rgb(80, 255, 65)" w="100%" p={4} color="green">
+        <Box bg="rgb(109, 121, 154)" w="100%" p={4} color="rgb(255, 255, 255)">
           <Flex>
             <Text>Mananger</Text>
           </Flex>
         </Box>
         <Box w="100%" p={4} color="green">
           <Flex>
-            <Button colorScheme="green" size="sm" marginLeft="10px" onClick={handleOpen}>Adicionar</Button>
+            
           </Flex>
         </Box>
         <DynamicTable color="red" data={dataRequest}/>
