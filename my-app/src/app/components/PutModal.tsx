@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormLabel, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { FormLabel, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import Controller from '../scripts/helpers/Controller';
 
@@ -13,6 +13,7 @@ const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id }) => {
   const [name, setName] = useState('');
   const [functionValue, setFunctionValue] = useState('');
   const [departament, setdepartament] = useState('');
+  const [errors, setErrors] = useState({ name: false, functionValue: false, departament: false });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +28,17 @@ const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id }) => {
   }, [isOpen, id]);
 
   const handleUpdate = async () => {
+    let newErrors = { name: false, functionValue: false, departament: false };
+
+    if (!name) newErrors.name = true;
+    if (!functionValue) newErrors.functionValue = true;
+    if (!departament) newErrors.departament = true;
+
+    if (newErrors.name || newErrors.functionValue || newErrors.departament) {
+      setErrors(newErrors);
+      return;
+    }
+
     const updatedData = await Controller.putData(id, name, functionValue, departament);
     setName(updatedData.name);
     setFunctionValue(updatedData.position);
@@ -40,12 +52,21 @@ const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id }) => {
         <ModalHeader>Atualizar dados</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormLabel>Nome</FormLabel>
-          <Input value={name} onChange={e => setName(e.target.value)} />
-          <FormLabel>Posição</FormLabel>
-          <Input value={functionValue} onChange={e => setFunctionValue(e.target.value)} />
-          <FormLabel>departament</FormLabel>
-          <Input value={departament} onChange={e => setdepartament(e.target.value)} />
+          <FormControl isInvalid={errors.name}>
+            <FormLabel>Nome</FormLabel>
+            <Input value={name} onChange={e => setName(e.target.value)} />
+            <FormErrorMessage>O campo nome é obrigatório</FormErrorMessage>
+          </FormControl>
+          <FormControl mt={4} isInvalid={errors.functionValue}>
+            <FormLabel>Posição</FormLabel>
+            <Input value={functionValue} onChange={e => setFunctionValue(e.target.value)} />
+            <FormErrorMessage>O campo posição é obrigatório</FormErrorMessage>
+          </FormControl>
+          <FormControl mt={4} isInvalid={errors.departament}>
+            <FormLabel>Departamento</FormLabel>
+            <Input value={departament} onChange={e => setdepartament(e.target.value)} />
+            <FormErrorMessage>O campo departamento é obrigatório</FormErrorMessage>
+          </FormControl>
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
