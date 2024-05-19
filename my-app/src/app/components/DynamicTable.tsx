@@ -23,9 +23,16 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
   const [selectedId, setSelectedId] = useState(null);
   const { isOpen: isDeleteModalOpen, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure();
   const { isOpen: isCreateModalOpen, onOpen: onCreateModalOpen, onClose: onCloseCreateModal } = useDisclosure();
+  const { isOpen: isPutModalOpen, onOpen: onOpenPutModal, onClose: onClosePutModal } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [putSelectedId, setPutSelectedId] = useState('');
   
+  const putClickHandler = (id: string) => () => {
+    setPutSelectedId(id);
+    onOpenPutModal();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await data;
@@ -92,23 +99,22 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
         <Tbody>
           {sortedData && Array.isArray(sortedData) && sortedData.map((row: RowData, index: number) => (
             <Tr key={index}>
-              <Td textAlign="center">{row.name}</Td>
-              <Td textAlign="center">{row.position}</Td>
-              <Td textAlign="center">{row.departament}</Td>
+              <Td textAlign="center">{String(row.name)}</Td>
+              <Td textAlign="center">{String(row.position)}</Td>
+              <Td textAlign="center">{String(row.departament)}</Td>
               <Td textAlign="center">
-                <Button colorScheme="purple" size="sm" onClick={() => { setSelectedId(row._id.toString()); onOpen(); }}>Atualizar</Button>
-                <Button colorScheme="gray" size="sm" marginLeft="10px" onClick={() => { setSelectedId(row._id.toString()); onOpenDeleteModal(); }}>Deletar</Button>
-                <PutModal 
-                  isOpen={isOpen} 
-                  onClose={onClose} 
-                  id={row?._id?.toString() ?? ''} 
-                 />
-                <DeleteModal 
-                  isOpen={isDeleteModalOpen} 
-                  onClose={onCloseDeleteModal} 
-                  id={row?._id?.toString() ?? ''} 
-                />
-
+              <Button colorScheme="purple" size="sm" onClick={putClickHandler(row._id.toString())}>Atualizar</Button>
+              <Button colorScheme="gray" size="sm" marginLeft="10px" onClick={() => { setSelectedId(row._id.toString()); onOpenDeleteModal(); }}>Deletar</Button>
+              <PutModal 
+                isOpen={isPutModalOpen} 
+                onClose={onClosePutModal} 
+                id={putSelectedId} 
+              />
+              <DeleteModal 
+                isOpen={isDeleteModalOpen} 
+                onClose={onCloseDeleteModal} 
+                id={String(selectedId)} 
+              />
               </Td>
             </Tr>
           ))}
