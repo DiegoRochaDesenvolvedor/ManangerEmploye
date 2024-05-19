@@ -9,10 +9,13 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
+  departament: {
     type: String,
     required: true,
-    unique: true
+  },
+  adimission: {
+    type: Date,
+    required: true,
   }
 });
 

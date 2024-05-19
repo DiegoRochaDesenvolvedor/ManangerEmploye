@@ -4,16 +4,21 @@ const Employee = require('../database/models/Employee');
 const router: Router = express.Router();
 
 router.post('/employee', async (req: Request, res: Response) => {
+  const { name, position, departament, adimission } = req.body;
+  const adimissionDate = new Date(adimission);    
+  console.log('adimissionDATE--',adimissionDate)
   const newEmployee = new Employee({
-    name: req.body.name,
-    position: req.body.position,
-    email: req.body.email
+    name,
+    position,
+    departament,
+    adimission:adimissionDate
   });
 
   try {
     const employee = await newEmployee.save();
     res.send(employee);
   } catch (err:any) {
+    console.error(err);
     if (err.code === 11000) {
       res.status(400).send('Duplicate key error: ' + err.keyValue);
     } else {
@@ -47,6 +52,19 @@ router.get('/employees', async (req: Request, res: Response) => {
   try {
     const employees = await Employee.find();
     res.json(employees);
+  } catch (err: any) {
+    res.status(500).send('Server error: ' + err.message);
+  }
+});
+
+router.get('/employees/:id', async (req: Request, res: Response) => {
+  try {
+    const employee = await Employee.findById(req.params.id);
+    if (employee) {
+      res.json(employee);
+    } else {
+      res.status(404).send('Employee not found');
+    }
   } catch (err: any) {
     res.status(500).send('Server error: ' + err.message);
   }

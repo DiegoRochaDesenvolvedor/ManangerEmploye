@@ -7,28 +7,30 @@ interface PutModalProps {
   isOpen: boolean;
   onClose: () => void;
   id: string;
-  data: { name: string; position: string; email: string; };
 }
 
-const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id, data }) => {
+const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id }) => {
   const [name, setName] = useState('');
   const [functionValue, setFunctionValue] = useState('');
-  const [email, setEmail] = useState('');
-  const [, forceUpdate] = useState();
+  const [departament, setdepartament] = useState('');
 
   useEffect(() => {
-    if (isOpen && data) {
-      setName(data.name);
-      setFunctionValue(data.position);
-      setEmail(data.email);
-    }
-  }, [isOpen, data]); 
+    const fetchData = async () => {
+      if (isOpen) {
+        const data = await Controller.getEmployeeById(id);
+        setName(data.name);
+        setFunctionValue(data.position);
+        setdepartament(data.departament);
+      }
+    };
+    fetchData();
+  }, [isOpen, id]);
 
   const handleUpdate = async () => {
-    const updatedData = await Controller.putData(id, name, functionValue, email);
+    const updatedData = await Controller.putData(id, name, functionValue, departament);
     setName(updatedData.name);
     setFunctionValue(updatedData.position);
-    setEmail(updatedData.email);
+    setdepartament(updatedData.departament);
   };
 
   return(
@@ -42,8 +44,8 @@ const PutModal: React.FC<PutModalProps> = ({ isOpen, onClose, id, data }) => {
           <Input value={name} onChange={e => setName(e.target.value)} />
           <FormLabel>Posição</FormLabel>
           <Input value={functionValue} onChange={e => setFunctionValue(e.target.value)} />
-          <FormLabel>Email</FormLabel>
-          <Input value={email} onChange={e => setEmail(e.target.value)} />
+          <FormLabel>departament</FormLabel>
+          <Input value={departament} onChange={e => setdepartament(e.target.value)} />
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>

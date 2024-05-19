@@ -4,7 +4,7 @@ interface Employee {
   _id: string;
   name: string;
   position: string;
-  email: string;
+  departament: string;
 }
 export default async function getAllEmployees() {
   try {

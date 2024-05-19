@@ -17,10 +17,11 @@ import Controller from '../scripts/helpers/Controller';
 const CreateModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
-  const [email, setEmail] = useState("");
+  const [departament, setdepartament] = useState("");
+  const [adimission, setAdmission] = useState("");
 
   const handleSubmit = () => {
-    Controller.createEmployee(name, position, email);
+    Controller.createEmployee(name, position, departament, adimission);
     onClose();
   };
 
@@ -40,11 +41,14 @@ const CreateModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void
             <Input value={position} onChange={(e) => setPosition(e.target.value)} />
           </FormControl>
           <FormControl mt={4}>
-            <FormLabel>Email</FormLabel>
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            <FormLabel>Departamento</FormLabel>
+            <Input value={departament} onChange={(e) => setdepartament(e.target.value)} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Admissão</FormLabel>
+            <Input type="date" onChange={(e) => setAdmission(e.target.value)} />
           </FormControl>
         </ModalBody>
-
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Cancelar

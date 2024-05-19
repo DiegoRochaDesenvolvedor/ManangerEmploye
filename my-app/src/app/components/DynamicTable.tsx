@@ -4,7 +4,6 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, Modal
 import { ChakraProvider } from "@chakra-ui/react"
 import PutModal from './PutModal'
 import DeleteModal from './DeleteModal'
-import filterById from '../scripts/helpers/filterById';
 
 interface DynamicTableProps {
   color: string;
@@ -13,7 +12,7 @@ interface DynamicTableProps {
 interface RowData {
   name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
   position: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
-  email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
+  departament: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined;
   _id?: any;}
 const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,8 +34,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
     <Thead>
       <Tr>
         <Th textAlign="center">Nome</Th>
-        <Th textAlign="center">Posição</Th>
-        <Th textAlign="center">Email</Th>
+        <Th textAlign="center">Cargo</Th>
+        <Th textAlign="center">Departamento</Th>
         <Th textAlign="center">Ações</Th>
       </Tr>
     </Thead>
@@ -45,7 +44,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
         <Tr key={index}>
           <Td textAlign="center">{row.name}</Td>
           <Td textAlign="center">{row.position}</Td>
-          <Td textAlign="center">{row.email}</Td>
+          <Td textAlign="center">{row.departament}</Td>
           <Td textAlign="center">
             <Button colorScheme="purple" size="sm" onClick={() => { setSelectedId(row._id.toString()); onOpen(); }}>Atualizar</Button>
             <Button colorScheme="gray" size="sm" marginLeft="10px" onClick={() => { setSelectedId(row._id.toString()); onOpenDeleteModal(); }}>Deletar</Button>
@@ -53,7 +52,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ color, data }) => {
               isOpen={isOpen} 
               onClose={onClose} 
               id={row?._id?.toString() ?? ''} 
-              data={filterById(dataResolved.map((item: RowData) => ({ _id: item._id })), row?._id?.toString())?.[0] ?? { _id: '', name: '', position: '', email: '' }}/>
+             />
             <DeleteModal 
               isOpen={isDeleteModalOpen} 
               onClose={onCloseDeleteModal} 
